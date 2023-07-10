@@ -6,24 +6,22 @@
       title="输入密码"
       show-cancel-button
       @confirm="onSubmit"
-      @cancel="show = false"
+      @cancel="onCancel"
       :before-close="beforeClose"
       :confirm-button-disabled="!password"
     >
-      <van-cell-group inset>
-        <van-field
-          v-model="password"
-          type="password"
-          name="password"
-          label="密码"
-          placeholder="密码"
-          :rules="[{ required: true, message: '请填写密码' }]"
-        />
-      </van-cell-group>
+      <van-field
+        v-model="password"
+        type="password"
+        name="password"
+        label="密码"
+        placeholder="密码"
+      />
     </van-dialog>
   </div>
 </template>
 <script setup lang="ts">
+import { WalletInfoStorageKey } from '@/utils/consts'
 import * as bip39 from 'bip39'
 import { ref } from 'vue'
 
@@ -46,12 +44,17 @@ const beforeClose = () => {
 }
 const onSubmit = () => {
   console.log('submit', password.value)
-  const val = bip39.generateMnemonic()
+  const walletInfo = window.$storage.get(WalletInfoStorageKey)
+  const val = walletInfo?.[0]?.mnemonic || bip39.generateMnemonic()
+  console.log('mnemonic', mnemonic)
   mnemonic.value = val
-  emits('onSuccess', val)
+  emits('onSuccess', { m: mnemonic.value, p: password.value })
   show.value = false
 }
-
+const onCancel = () => {
+  show.value = false
+  password.value = ''
+}
 const createWallet = async () => {
   console.log('createWallet')
   show.value = true

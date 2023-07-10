@@ -6,4 +6,6 @@ export const Account3 = '0xBb9429df9151ba6c88dC3e163403aC7Ed33354E3'
 
 export const InfuraGoerliWsUrl = 'wss://goerli.infura.io/ws/v3/c716104bdaa8452cbc8cb522c00c8f10'
 
-export const DerivePath = `m/44'/60'/0'/0/0`
+export const DerivePath = `m/44'/60'/0'/0/`
+
+export const WalletInfoStorageKey = 'wallet-info'

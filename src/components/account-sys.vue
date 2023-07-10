@@ -46,7 +46,7 @@ const generateKeyPair = async () => {
   const hdWallet = hdkey.fromMasterSeed(seed)
   console.log('hdWallet', hdWallet)
   // m/purpse'/coin_type'/account'/change/address_index
-  const keypair = hdWallet.derivePath(path.value)
+  const keypair = hdWallet.derivePath(`${path.value}0`)
   console.log('keypair', keypair)
   return keypair
 }

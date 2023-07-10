@@ -7,7 +7,8 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    AccountSys: typeof import('./src/components/AccountSys.vue')['default']
+    AccountList: typeof import('./src/components/account-list.vue')['default']
+    AccountSys: typeof import('./src/components/account-sys.vue')['default']
     Actions: typeof import('./src/components/Actions.vue')['default']
     Button: typeof import('./src/components/Button.vue')['default']
     copy: typeof import('./src/components/dialog/create-password copy.vue')['default']
@@ -21,8 +22,9 @@ declare module 'vue' {
     PasswordDialog: typeof import('./src/components/dialog/password-dialog.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    SavaMnemnic: typeof import('./src/components/dialog/sava-mnemnic.vue')['default']
-    SaveMnemnic: typeof import('./src/components/dialog/save-mnemnic.vue')['default']
+    Savamnemonic: typeof import('./src/components/dialog/sava-mnemonic.vue')['default']
+    Savemnemonic: typeof import('./src/components/dialog/save-mnemonic.vue')['default']
+    SaveMnemonic: typeof import('./src/components/dialog/save-mnemonic.vue')['default']
     TheWelcome: typeof import('./src/components/TheWelcome.vue')['default']
     VanButton: typeof import('vant/es')['Button']
     VanCard: typeof import('vant/es')['Card']
@@ -35,7 +37,7 @@ declare module 'vue' {
     VanSpace: typeof import('vant/es')['Space']
     VantButton: typeof import('vant/es')['tButton']
     VanTextarea: typeof import('vant/es')['Textarea']
-    Web3Api: typeof import('./src/components/Web3Api.vue')['default']
+    Web3Api: typeof import('./src/components/web3-api.vue')['default']
     WelcomeItem: typeof import('./src/components/WelcomeItem.vue')['default']
   }
 }

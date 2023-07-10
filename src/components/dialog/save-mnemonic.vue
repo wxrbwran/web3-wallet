@@ -14,7 +14,7 @@
         <van-field
           v-model="inputMnemonic"
           type="textarea"
-          name="mnemnic"
+          name="mnemonic"
           label=""
           placeholder="助记词"
         />
@@ -23,7 +23,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
+import { showToast } from 'vant'
 
 const props = defineProps<{
   mnemonic: string
@@ -39,11 +39,14 @@ const beforeClose = () => {
   // return false
 }
 const onSubmit = () => {
-  console.log('props.mnemonic', props.mnemonic)
-  console.log('inputMnemonic.value', inputMnemonic.value)
-
-  emits('onSave')
-  show.value = false
+  // console.log('props.mnemonic', props.mnemonic)
+  // console.log('inputMnemonic.value', inputMnemonic.value)
+  if (props.mnemonic === inputMnemonic.value) {
+    emits('onSave')
+    show.value = false
+  } else {
+    showToast({ type: 'fail', message: '助记词错误' })
+  }
 }
 </script>
 <style scoped lang="less"></style>

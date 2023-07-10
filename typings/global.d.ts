@@ -7,3 +7,14 @@ declare interface Window {
     clear: () => void
   }
 }
+
+declare type WalletInfo = {
+  id: number
+  address: string
+  checkAddress: string
+  privateKey: string
+  keystore: V3Keystore
+  mnemonic: string
+  balance: number
+  password: string
+}
