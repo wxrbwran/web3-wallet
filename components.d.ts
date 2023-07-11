@@ -8,7 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AccountList: typeof import('./src/components/account-list.vue')['default']
-    AccountSys: typeof import('./src/components/account-sys.vue')['default']
+    AccountSys: typeof import('./src/components/learn/account-sys.vue')['default']
     Actions: typeof import('./src/components/Actions.vue')['default']
     Button: typeof import('./src/components/Button.vue')['default']
     copy: typeof import('./src/components/dialog/create-password copy.vue')['default']
@@ -19,6 +19,7 @@ declare module 'vue' {
     IconEcosystem: typeof import('./src/components/icons/IconEcosystem.vue')['default']
     IconSupport: typeof import('./src/components/icons/IconSupport.vue')['default']
     IconTooling: typeof import('./src/components/icons/IconTooling.vue')['default']
+    InputPassword: typeof import('./src/components/dialog/input-password.vue')['default']
     PasswordDialog: typeof import('./src/components/dialog/password-dialog.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
@@ -28,16 +29,19 @@ declare module 'vue' {
     TheWelcome: typeof import('./src/components/TheWelcome.vue')['default']
     VanButton: typeof import('vant/es')['Button']
     VanCard: typeof import('vant/es')['Card']
+    VanCell: typeof import('vant/es')['Cell']
     VanCellGroup: typeof import('vant/es')['CellGroup']
     VanDialog: typeof import('vant/es')['Dialog']
     VanDivider: typeof import('vant/es')['Divider']
     VanField: typeof import('vant/es')['Field']
     VanForm: typeof import('vant/es')['Form']
+    VanIco: typeof import('vant/es')['Ico']
+    VanIcon: typeof import('vant/es')['Icon']
     VanRow: typeof import('vant/es')['Row']
     VanSpace: typeof import('vant/es')['Space']
     VantButton: typeof import('vant/es')['tButton']
     VanTextarea: typeof import('vant/es')['Textarea']
-    Web3Api: typeof import('./src/components/web3-api.vue')['default']
+    Web3Api: typeof import('./src/components/learn/web3-api.vue')['default']
     WelcomeItem: typeof import('./src/components/WelcomeItem.vue')['default']
   }
 }

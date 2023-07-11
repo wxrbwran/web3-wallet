@@ -1,6 +1,6 @@
 <template>
   <div>
-    <van-button type="primary" @click="createWallet">创建钱包</van-button>
+    <van-button :type="btnType || 'primary'" @click="open">{{ btnText }}</van-button>
     <van-dialog
       v-model:show="show"
       title="输入密码"
@@ -21,20 +21,16 @@
   </div>
 </template>
 <script setup lang="ts">
-import { WalletInfoStorageKey } from '@/utils/consts'
-import * as bip39 from 'bip39'
+import { ButtonType } from 'vant'
 import { ref } from 'vue'
 
-// const props = defineProps({
-//   show: {
-//     type: Boolean,
-//     default: false
-//   }
-// })
+defineProps<{
+  btnText: string
+  btnType?: ButtonType
+}>()
 
 const emits = defineEmits(['onSuccess'])
 
-const mnemonic = ref<string>('')
 const show = ref<boolean>(false)
 const password = ref<string>('')
 
@@ -43,20 +39,16 @@ const beforeClose = () => {
   // return false
 }
 const onSubmit = () => {
-  console.log('submit', password.value)
-  const walletInfo = window.$storage.get(WalletInfoStorageKey)
-  const val = walletInfo?.[0]?.mnemonic || bip39.generateMnemonic()
-  console.log('mnemonic', mnemonic)
-  mnemonic.value = val
-  emits('onSuccess', { m: mnemonic.value, p: password.value })
+  // console.log('submit', password.value)
+  emits('onSuccess', { p: password.value })
   show.value = false
 }
 const onCancel = () => {
   show.value = false
   password.value = ''
 }
-const createWallet = async () => {
-  console.log('createWallet')
+const open = async () => {
+  // console.log('open')
   show.value = true
 }
 </script>

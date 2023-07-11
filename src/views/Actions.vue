@@ -1,6 +1,6 @@
 <template>
   <van-space>
-    <CreatePassword @onSuccess="onSuccess"></CreatePassword>
+    <InputPassword @onSuccess="onSuccess" btn-text="创建钱包"></InputPassword>
     <van-button type="primary">导入钱包</van-button>
   </van-space>
   <van-divider></van-divider>
@@ -14,12 +14,12 @@
 import { mnemonicToSeed } from 'bip39'
 import Wallet, { hdkey } from 'ethereumjs-wallet'
 import { useWalletStore } from '@/stores/useWalletStore'
+import * as bip39 from 'bip39'
 
-import CreatePassword from '@/components/dialog/create-password.vue'
+import InputPassword from '@/components/dialog/input-password.vue'
 import SaveMnemonic from '@/components/dialog/save-mnemonic.vue'
-import { DerivePath, InfuraGoerliWsUrl, WalletInfoStorageKey } from '@/utils/consts'
+import { DerivePath, WalletInfoStorageKey } from '@/utils/consts'
 import { showToast } from 'vant'
-import Web3 from 'web3'
 
 const emits = defineEmits(['onCreateAccount'])
 
@@ -28,11 +28,14 @@ const mnemonic = ref<string>('')
 const openMnemonic = ref<boolean>(false)
 const walletStore = useWalletStore()
 
-const web3: Web3 = new Web3(Web3.givenProvider || InfuraGoerliWsUrl)
+const { proxy } = getCurrentInstance() as any
 const walletInfoLocal = window.$storage.get(WalletInfoStorageKey) || []
 
-const onSuccess = ({ m, p }: { m: string; p: string }) => {
-  mnemonic.value = m
+const onSuccess = ({ p }: { p: string }) => {
+  const walletInfo = window.$storage.get(WalletInfoStorageKey)
+  const val = walletInfo?.[0]?.mnemonic || bip39.generateMnemonic()
+  // console.log('mnemonic', mnemonic)
+  mnemonic.value = val
   password.value = p
   if (walletInfoLocal.length === 0) {
     openMnemonic.value = true
@@ -41,7 +44,7 @@ const onSuccess = ({ m, p }: { m: string; p: string }) => {
   }
 }
 const onSave = async () => {
-  console.log('onSave ok')
+  // console.log('onSave ok')
   const addressIndex = walletInfoLocal?.length || 0
   const toast = showToast({ type: 'loading', message: '正在保存钱包信息', duration: 0 })
   const seed = await mnemonicToSeed(mnemonic.value)
@@ -60,7 +63,7 @@ const onSave = async () => {
   const privateKey = wallet.getPrivateKey().toString('hex')
   // 生成keystore
   // const keystore = await wallet.toV3(password.value) // 太慢
-  const keystore = web3.eth.accounts.encrypt(privateKey, password.value)
+  const keystore = proxy?.web3.eth.accounts.encrypt(privateKey, password.value)
   const walletInfo: WalletInfo[] = [
     ...walletInfoLocal,
     {

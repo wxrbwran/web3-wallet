@@ -14,11 +14,11 @@
 </template>
 <script setup lang="ts">
 import Web3 from 'web3'
-import { Account1, Account2, Account3, InfuraGoerliWsUrl } from '@/utils/consts.ts'
+import { Account1, Account2, Account3, InfuraGoerliWsUrl } from '@/utils/consts'
 import { showToast } from 'vant'
 import Tx from 'ethereumjs-tx'
 import { Buffer } from 'node:buffer'
-import { Account1PK } from '@/utils/goerliPK.ts'
+import { Account1PK } from '@/utils/goerliPK'
 
 const count = ref<string>('0')
 const web3: Web3 = new Web3(Web3.givenProvider || InfuraGoerliWsUrl)
@@ -31,8 +31,8 @@ const createAccount = () => {
   // }
 }
 // 余额获取
-const getBalance = async (account: string) => {
-  const balance = await web3.eth.getBalance(
+const getBalance = async (web3Instance: Web3, account: string) => {
+  const balance = await web3Instance.eth.getBalance(
     // web3,
     // '0xBb9429df9151ba6c88dC3e163403aC7Ed33354E3',
     account
@@ -107,7 +107,7 @@ const send = async () => {
   // 第一个节点确认
   trans.on('receipt', (res) => {
     console.log('第一个节点确认receipt:', res)
-    getBalance(Account1)
+    getBalance(web3, Account1)
   })
   // 每一个节点确认
   trans.on('confirmation', (res) => {
@@ -117,7 +117,7 @@ const send = async () => {
 }
 onMounted(async () => {
   // createAccount()
-  getBalance(Account1)
+  getBalance(web3, Account1)
 })
 </script>
 <style scoped lang="less"></style>

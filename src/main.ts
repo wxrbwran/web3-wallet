@@ -8,10 +8,14 @@ import router from './router'
 import { Toast } from 'vant'
 import 'vant/lib/index.css'
 import storage from '@/utils/storage'
+import Web3 from 'web3'
+import { InfuraGoerliWsUrl } from './utils/consts'
 
 window.$storage = storage('web3-wallet')
+const web3: Web3 = new Web3(Web3.givenProvider || InfuraGoerliWsUrl)
 
 const app = createApp(App)
+app.config.globalProperties.web3 = web3
 
 const pinia = createPinia()
 const installPersistedStatePlugin = createPersistedStatePlugin()
