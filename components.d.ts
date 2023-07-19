@@ -39,6 +39,8 @@ declare module 'vue' {
     VanIcon: typeof import('vant/es')['Icon']
     VanRow: typeof import('vant/es')['Row']
     VanSpace: typeof import('vant/es')['Space']
+    VanTabbar: typeof import('vant/es')['Tabbar']
+    VanTabbarItem: typeof import('vant/es')['TabbarItem']
     VantButton: typeof import('vant/es')['tButton']
     VanTextarea: typeof import('vant/es')['Textarea']
     Web3Api: typeof import('./src/components/learn/web3-api.vue')['default']

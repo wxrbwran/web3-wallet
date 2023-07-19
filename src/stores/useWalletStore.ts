@@ -2,11 +2,11 @@ import { defineStore } from 'pinia'
 
 export const useWalletStore = defineStore('useWalletStore', () => {
   const data = reactive<{
-    info: WalletInfo[]
+    info: TWalletInfo[]
   }>({
-    info: [] as WalletInfo[]
+    info: [] as TWalletInfo[]
   })
-  function saveInfo(walletInfo: WalletInfo[]) {
+  function saveInfo(walletInfo: TWalletInfo[]) {
     data.info = walletInfo
   }
 

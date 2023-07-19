@@ -11,12 +11,17 @@ import storage from '@/utils/storage'
 import Web3 from 'web3'
 import { InfuraGoerliWsUrl } from './utils/consts'
 
+// console.log('qtumContract', qtumContract)
+
 window.$storage = storage('web3-wallet')
-const web3: Web3 = new Web3(Web3.givenProvider || InfuraGoerliWsUrl)
 
 const app = createApp(App)
+
+// web3
+const web3: Web3 = new Web3(Web3.givenProvider || InfuraGoerliWsUrl)
 app.config.globalProperties.web3 = web3
 
+// pinia
 const pinia = createPinia()
 const installPersistedStatePlugin = createPersistedStatePlugin()
 pinia.use(installPersistedStatePlugin)
@@ -26,3 +31,7 @@ app.use(router)
 app.use(Toast)
 
 app.mount('#app')
+
+if (typeof window.ethereum !== undefined) {
+  console.log('MetaMask is installed')
+}

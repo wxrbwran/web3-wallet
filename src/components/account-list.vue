@@ -33,13 +33,13 @@ import { getPrivateKeyByWeb3KeyStore, transfer } from '@/utils/tools'
 import { showToast } from 'vant'
 
 const { proxy } = getCurrentInstance() as any
-const walletInfo = ref<WalletInfo[]>([])
+const walletInfo = ref<TWalletInfo[]>([])
 const walletStore = useWalletStore()
 
 const getWalletInfo = async () => {
   const toast = showToast({ type: 'loading' })
   const walletInfoLocal = window.$storage.get(WalletInfoStorageKey) || []
-  await walletInfoLocal.forEach(async (info: WalletInfo, index: number) => {
+  await walletInfoLocal.forEach(async (info: TWalletInfo, index: number) => {
     const res = await proxy?.web3?.eth.getBalance(info.address)
     const balance = proxy?.web3?.utils.fromWei(res || '0', 'ether')
     info.balance = +Number.parseFloat(balance).toFixed(7)
@@ -47,13 +47,14 @@ const getWalletInfo = async () => {
   })
   toast.close()
 }
-const onSuccess = async (item: WalletInfo, { p }: { p: string }, index: number) => {
+const onSuccess = async (item: TWalletInfo, { p }: { p: string }, index: number) => {
   try {
     const pk = getPrivateKeyByWeb3KeyStore(proxy.web3, item.keystore, p)
     if (pk) {
       await transfer(proxy.web3, item.address, Account1, pk)
+      // console.log('res', res)
       showToast({ type: 'success', message: '转账成功' })
-      walletInfo.value[index].balance = await proxy?.web3?.eth.getBalance(item.address)
+      walletInfo.value[index] = await proxy?.web3?.eth.getBalance(item.address)
       walletStore.saveInfo(walletInfo.value)
       window.$storage.set(WalletInfoStorageKey, walletInfo.value)
     }

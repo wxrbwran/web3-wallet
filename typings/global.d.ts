@@ -1,4 +1,5 @@
 declare interface Window {
+  ethereum: any
   $storage: {
     setType: (key: 'localStorage' | 'sessionStorage') => any
     get: (key: string) => unkonwn | undefined
@@ -8,7 +9,7 @@ declare interface Window {
   }
 }
 
-declare type WalletInfo = {
+declare type TWalletInfo = {
   id: number
   address: string
   checkAddress: string
@@ -17,4 +18,11 @@ declare type WalletInfo = {
   mnemonic: string
   balance: number
   password: string
+}
+
+declare type TCoinInfo = {
+  name: string
+  symbol: string
+  balanceOf: number
+  totalSupply: string
 }

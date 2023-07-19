@@ -64,7 +64,7 @@ const onSave = async () => {
   // 生成keystore
   // const keystore = await wallet.toV3(password.value) // 太慢
   const keystore = proxy?.web3.eth.accounts.encrypt(privateKey, password.value)
-  const walletInfo: WalletInfo[] = [
+  const walletInfo: TWalletInfo[] = [
     ...walletInfoLocal,
     {
       id: addressIndex,

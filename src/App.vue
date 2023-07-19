@@ -1,17 +1,6 @@
 <template>
-  <div class="p-[10px]">
-    <Actions @onCreateAccount="onCreateAccount"></Actions>
-    <AccountList ref="accountList"></AccountList>
-  </div>
+  <RouterView></RouterView>
 </template>
-<script setup lang="ts">
-import Actions from '@/views/Actions.vue'
-import AccountList from '@/components/account-list.vue'
-
-const accountList = ref()
-const onCreateAccount = () => {
-  accountList.value.getWalletInfo()
-}
-</script>
+<script setup lang="ts"></script>
 
 <style scoped lang="less"></style>
