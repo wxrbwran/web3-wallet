@@ -12,7 +12,7 @@
     <!-- </van-cell> -->
     <div v-for="(item, index) in walletInfo" :key="item.id">
       <div class="flex h-[50px] justify-around">
-        <h1 class="text-red-500 w-[60px] flex-none">账号{{ index + 1 }}：</h1>
+        <h4 class="text-red-500 w-[60px] flex-none">账号{{ index + 1 }}：</h4>
         <p class="break-words select-all w-[170px]">{{ item.address }}</p>
         <InputPassword
           btn-type="warning"

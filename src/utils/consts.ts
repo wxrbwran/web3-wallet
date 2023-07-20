@@ -9,3 +9,11 @@ export const InfuraGoerliWsUrl = 'wss://goerli.infura.io/ws/v3/c716104bdaa8452cb
 export const DerivePath = `m/44'/60'/0'/0/`
 
 export const WalletInfoStorageKey = 'wallet-info'
+
+export const CoinInfoMap: Record<string, string> = {
+  name: '名称',
+  symbol: '标识',
+  totalSupply: '总发行量',
+  currentAccount: '当前账户',
+  balanceOf: '持有数量'
+}

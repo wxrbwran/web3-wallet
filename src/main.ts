@@ -10,7 +10,8 @@ import 'vant/lib/index.css'
 import storage from '@/utils/storage'
 import Web3 from 'web3'
 import { InfuraGoerliWsUrl } from './utils/consts'
-
+import 'virtual:uno.css'
+import 'animate.css'
 // console.log('qtumContract', qtumContract)
 
 window.$storage = storage('web3-wallet')
@@ -32,6 +33,6 @@ app.use(Toast)
 
 app.mount('#app')
 
-if (typeof window.ethereum !== undefined) {
+if (window.ethereum) {
   console.log('MetaMask is installed')
 }

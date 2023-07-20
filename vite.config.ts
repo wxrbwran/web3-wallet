@@ -6,11 +6,13 @@ import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import { VantResolver } from 'unplugin-vue-components/resolvers'
 import ComponentsPlugin from 'unplugin-vue-components/vite'
 import AutoImport from 'unplugin-auto-import/vite'
+import UnoCSS from 'unocss/vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
+    UnoCSS(),
     nodePolyfills({
       // To exclude specific polyfills, add them to this list.
       // exclude: [

@@ -20,9 +20,12 @@ declare type TWalletInfo = {
   password: string
 }
 
-declare type TCoinInfo = {
-  name: string
-  symbol: string
-  balanceOf: number
-  totalSupply: string
-}
+declare type TCoinInfoKey = 'name' | 'symbol' | 'balanceOf' | 'totalSupply' | 'currentAccount'
+
+declare type TCoinInfo = Record<TCoinInfoKey, string | number>
+// {
+//   name: string
+//   symbol: string
+//   balanceOf: number
+//   totalSupply: string
+// }
