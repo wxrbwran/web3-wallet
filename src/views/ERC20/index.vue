@@ -99,14 +99,13 @@ const initContract = async () => {
     '0xEc20Ff7B90ecf57BBef561a2b56124cC370bF32a'
   )
   contract.value = qtumContract
-  console.log('qtumContract', qtumContract)
+  // console.log('qtumContract', qtumContract)
 }
 
 // 获取代币信息
 const getCoinInfo = async () => {
   data.loading = true
   const account = await web3.eth.requestAccounts()
-  console.log('account', account)
   currentAccount.value = account[0]
   const methods = await contract.value.methods
   const name = await methods.name().call()
@@ -125,14 +124,14 @@ const getCoinInfo = async () => {
   data.loading = false
   data.finished = true
 
-  console.log('coinInfo', data.coinInfo)
+  // console.log('coinInfo', data.coinInfo)
 }
 // 转账
 const handleTransfer = async () => {
   sending.value = true
-  console.log('handleTransfer', toAddress.value, count.value)
+  // console.log('handleTransfer', toAddress.value, count.value)
   const weiCount = web3.utils.toWei(`${count.value}`, 'ether')
-  console.log('handleTransfer', weiCount)
+  // console.log('handleTransfer', weiCount)
   const loadingToast = showLoadingToast({ duration: 0, message: '正在转账' })
   contract.value.methods
     .transfer(toAddress.value, weiCount)
@@ -144,7 +143,7 @@ const handleTransfer = async () => {
       sending.value = false
       toAddress.value = ''
       count.value = undefined
-      console.log('交易成功')
+      // console.log('交易成功')
       showToast({
         type: 'success',
         message: '交易成功'
@@ -154,7 +153,7 @@ const handleTransfer = async () => {
     .on('error', (err: any) => {
       loadingToast.close()
       sending.value = false
-      console.log(err.message)
+      // console.log(err.message)
       showToast({
         type: 'fail',
         message: err.message
