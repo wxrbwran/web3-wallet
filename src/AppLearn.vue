@@ -17,8 +17,8 @@
 </template>
 <script setup lang="ts">
 // import { Web3 } from 'web3'
-import Web3Api from '@/components/Web3Api.vue'
-import AccountSys from '@/components/AccountSys.vue'
+import Web3Api from '@/components/learn/web3-api.vue'
+import AccountSys from '@/components/learn/account-sys.vue'
 </script>
 
 <style scoped lang="less"></style>

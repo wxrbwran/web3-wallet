@@ -14,8 +14,8 @@
 </template>
 <script setup lang="ts">
 import Web3 from 'web3'
-import { Account1, Account2, Account3, InfuraGoerliWsUrl } from '@/utils/consts'
-import { showToast } from 'vant'
+import { Account1, Account2, InfuraGoerliWsUrl } from '@/utils/consts'
+// @ts-ignore
 import Tx from 'ethereumjs-tx'
 import { Buffer } from 'node:buffer'
 import { Account1PK } from '@/utils/goerliPK'
@@ -71,7 +71,7 @@ const send = async () => {
   console.log('value: ', value)
   // 构建原始数据
   const rawTx = {
-    // gas: 0n, // 后续计算
+    gas: 0, // 后续计算
     from: Account1,
     to: Account2,
     nonce,

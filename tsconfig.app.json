@@ -8,7 +8,9 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "moduleResolution": "nodenext",
+    "moduleResolution": "node",
+    "target": "esnext",
+    "module": "esnext",
     "verbatimModuleSyntax": false
   }
 }

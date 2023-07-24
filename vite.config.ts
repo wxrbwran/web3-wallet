@@ -29,7 +29,7 @@ export default defineConfig({
     }),
     ComponentsPlugin({ resolvers: [VantResolver()] }),
     AutoImport({
-      imports: ['vue'],
+      imports: ['vue', 'vue-router'],
       resolvers: [VantResolver()],
       dts: 'src/auto-imports.d.ts',
       eslintrc: {

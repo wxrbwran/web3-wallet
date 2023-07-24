@@ -1,5 +1,6 @@
 import Web3 from 'web3'
 import { Buffer } from 'node:buffer'
+//@ts-ignore
 import Tx from 'ethereumjs-tx'
 import { error } from 'node:console'
 import { showToast } from 'vant'
