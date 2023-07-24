@@ -67,7 +67,7 @@
 
 <script setup lang="ts">
 import Web3 from 'web3'
-import qtumContractJSON from '@/contracts/Qutm.json'
+import QtumContractJSON from '@/contracts/Qutm.json'
 import { CoinInfoMap } from '@/utils/consts'
 import BottomNote from '@/components/bottom-note.vue'
 import { showLoadingToast, showToast } from 'vant'
@@ -95,7 +95,8 @@ const data = reactive<{ coinInfo: TCoinInfo; finished: boolean; loading: boolean
 
 const initContract = async () => {
   const qtumContract = new web3.eth.Contract(
-    qtumContractJSON.abi as any,
+    QtumContractJSON.abi as any,
+    // 部署地址
     '0xEc20Ff7B90ecf57BBef561a2b56124cC370bF32a'
   )
   contract.value = qtumContract

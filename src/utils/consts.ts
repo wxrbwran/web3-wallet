@@ -17,3 +17,15 @@ export const CoinInfoMap: Record<string, string> = {
   currentAccount: '当前账户',
   balanceOf: '持有数量'
 }
+export const AccountInfoMap: Record<string, string> = {
+  account: '当前账户',
+  amount: '账户票数',
+  delegator: '委托账户',
+  isVoted: '是否已投票',
+  targetId: '投票目标'
+
+  // amount: '',
+  //   delegator: '',
+  //   isVoted: '',
+  //   targetId: ''
+}

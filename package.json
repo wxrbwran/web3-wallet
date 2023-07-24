@@ -23,7 +23,8 @@
     "vant": "^4.6.1",
     "vue": "^3.3.4",
     "vue-router": "^4.2.2",
-    "web3": "^1.8.1"
+    "web3": "^1.8.1",
+    "web3-eth-contract": "^4.0.3"
   },
   "devDependencies": {
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",

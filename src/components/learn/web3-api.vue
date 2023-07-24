@@ -1,12 +1,12 @@
 <template>
   <div>
     <div>
-      <h1 class="text-[20px] text-red-500">账户信息：</h1>
+      <h1>账户信息：</h1>
       <p class="my-[10px] break-words">地址：0xBb9429df9151ba6c88dC3e163403aC7Ed33354E3</p>
       <p>余额：{{ count }}</p>
       <van-divider></van-divider>
 
-      <h1 class="text-[20px] text-red-500">转账操作：</h1>
+      <h1>转账操作：</h1>
       <van-button @click="send" type="primary" class="!my-[10px]">开始转账</van-button>
       <van-divider></van-divider>
     </div>
@@ -120,4 +120,8 @@ onMounted(async () => {
   getBalance(web3, Account1)
 })
 </script>
-<style scoped lang="less"></style>
+<style scoped lang="less">
+h1 {
+  @apply text-[20px] text-red-500;
+}
+</style>
