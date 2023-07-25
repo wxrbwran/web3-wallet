@@ -1,9 +1,10 @@
 <template>
   <div class="mt-[5px] pb-[15px]">
-    <div>
-      <van-cell :title="b.title" icon="shop-o" v-for="(b, i) in data.board" :key="b.targetId + i">
+    <div v-if="data.board.length > 0">
+      <van-cell :title="b[0]" icon="shop-o" v-for="(b, i) in data.board" :key="b[0] + i">
         <template #right-icon>
-          <van-button type="warning" @click="vote(i)" size="small">{{ b.amount }}</van-button>
+          <!-- <span>{{ JSON.stringify(b) }}</span> -->
+          <van-button type="warning" @click="vote(i)" size="small">{{ b[1] }}</van-button>
           <van-divider></van-divider>
         </template>
       </van-cell>
@@ -16,18 +17,7 @@ import useWeb3 from '@/hooks/useWeb3'
 const { VoteContract, getAccount } = useWeb3()
 
 const data = reactive({
-  board: [
-    {
-      title: '刘能',
-      targetId: 1,
-      amount: 1
-    },
-    {
-      title: '赵四',
-      targetId: 2,
-      amount: 2
-    }
-  ]
+  board: []
 })
 const vote = async (i: number) => {
   console.log('vote', i)
@@ -38,7 +28,7 @@ const vote = async (i: number) => {
 }
 const initEventListen = () => {
   VoteContract.events
-    .voteSuccess({ fromBlock: 0 }, (err: Error, event: any) => {
+    .VoteSuccess({ fromBlock: 0 }, (err: Error, event: any) => {
       console.log('监听执行')
       console.log('event', event)
     })
@@ -48,6 +38,7 @@ const initEventListen = () => {
 }
 const getBoardInfo = async () => {
   const res = await VoteContract.methods.getBoardInfo().call()
+  console.log('getBoardInfo', res)
   data.board = res
 }
 onMounted(async () => {

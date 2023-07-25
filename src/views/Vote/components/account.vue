@@ -7,12 +7,12 @@
         :finished="data.finished"
       >
         <van-cell
-          v-for="item in Object.keys(data.accountInfo)"
+          v-for="item in Object.keys(AccountInfoMap)"
           :key="item"
           :title="AccountInfoMap[item]"
           :title-style="{ flex: '0 0 25%' }"
           value-class="hover:(font-balck text-(red-500 [16px]))"
-          :value="data.accountInfo[item]"
+          :value="`${data.accountInfo[item]}`"
         />
       </van-list>
       <van-divider dashed>受托人地址</van-divider>
@@ -60,17 +60,18 @@ const data = reactive({
 const getVoterInfo = async () => {
   const account = await getAccount()
   data.accountInfo.account = account
-  const voterIfo = await VoteContract.methods.voters(account).call()
-  data.accountInfo = { ...data.accountInfo, ...voterIfo }
+  const voterInfo = await VoteContract.methods.voters(account).call()
+  data.accountInfo = { account, ...voterInfo }
 }
 const handleDelegate = async (values: { delegator: string }) => {
   console.log('values', values)
   VoteContract.methods
-    .delegator(values.delegator)
+    .delegate(values.delegator)
     .send({ from: data.accountInfo.account })
-    .on('receipt', (event: any) => {
+    .on('receipt', async (event: any) => {
       console.log('event', event)
       showToast({ type: 'success', message: '委托他人代投成功' })
+      await getVoterInfo()
     })
     .on('error', (err: any) => {
       // console.log(err.message)
@@ -81,8 +82,8 @@ const handleDelegate = async (values: { delegator: string }) => {
     })
 }
 
-onMounted(() => {
-  getVoterInfo()
+onMounted(async () => {
+  await getVoterInfo()
 })
 </script>
 <style scoped lang="less"></style>
