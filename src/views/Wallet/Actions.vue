@@ -82,6 +82,7 @@ const onSave = async () => {
   // console.log('wallet', wallet)
   // 获取钱包地址
   const lowerCaseAddress = wallet.getAddressString()
+  console.log('lowerCaseAddress', lowerCaseAddress)
   // 获取钱包校验地址
   const checkAddress = wallet.getChecksumAddressString()
   // 获取私钥

@@ -8,7 +8,7 @@
       @confirm="onSubmit"
       @cancel="onCancel"
       :before-close="beforeClose"
-      :cancel-button-disabled="!privateKey"
+      :confirm-button-disabled="!privateKey"
     >
       <van-field
         v-model="privateKey"
