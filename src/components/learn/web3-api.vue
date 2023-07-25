@@ -14,14 +14,15 @@
 </template>
 <script setup lang="ts">
 import Web3 from 'web3'
-import { Account1, Account2, InfuraGoerliWsUrl } from '@/utils/consts'
+import { Account1, Account2 } from '@/utils/consts'
 // @ts-ignore
 import Tx from 'ethereumjs-tx'
 import { Buffer } from 'node:buffer'
 import { Account1PK } from '@/utils/goerliPK'
+import useWeb3 from '@/hooks/useWeb3'
 
 const count = ref<string>('0')
-const web3: Web3 = new Web3(Web3.givenProvider || InfuraGoerliWsUrl)
+const { web3 } = useWeb3()
 // 创建账户
 const createAccount = () => {
   // const account = eth.accounts.create('kakLKASsdl@^&amsAd21asKDd0as^&*q23')

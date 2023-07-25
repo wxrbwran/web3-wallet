@@ -15,13 +15,13 @@
   </div>
 </template>
 <script setup lang="ts">
-import { InfuraGoerliWsUrl, DerivePath } from '@/utils/consts'
+import { DerivePath } from '@/utils/consts'
 import { generateMnemonic, mnemonicToSeed } from 'bip39'
 import Wallet, { hdkey } from 'ethereumjs-wallet'
-import Web3 from 'web3'
+import useWeb3 from '@/hooks/useWeb3'
 import { Buffer } from 'node:buffer'
 
-const web3: Web3 = new Web3(Web3.givenProvider || InfuraGoerliWsUrl)
+const { web3 } = useWeb3()
 
 const mnemonic = ref<string>(
   'swim road year machine symbol chaos immense during holiday urge disease angry'

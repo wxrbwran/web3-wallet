@@ -97,7 +97,7 @@ const initContract = async () => {
   const qtumContract = new web3.eth.Contract(
     QtumContractJSON.abi as any,
     // 部署地址
-    // '0xEc20Ff7B90ecf57BBef561a2b56124cC370bF32a' // geroli
+    // '0xEc20Ff7B90ecf57BBef561a2b56124cC370bF32a' // goerli
     '0x3e1A0F6aB4038Ce4742155263644c1c3DdE531fa' // ganache
   )
   contract.value = qtumContract

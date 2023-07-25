@@ -9,7 +9,7 @@ import { Toast } from 'vant'
 import 'vant/lib/index.css'
 import storage from '@/utils/storage'
 import Web3 from 'web3'
-import { InfuraGoerliWsUrl } from './utils/consts'
+import { GanacheWsUrl } from './utils/consts'
 import 'virtual:uno.css'
 import 'animate.css'
 // console.log('qtumContract', qtumContract)
@@ -19,7 +19,7 @@ window.$storage = storage('web3-wallet')
 const app = createApp(App)
 
 // web3
-const web3: Web3 = new Web3(Web3.givenProvider || InfuraGoerliWsUrl)
+const web3: Web3 = new Web3(Web3.givenProvider || GanacheWsUrl)
 app.config.globalProperties.web3 = web3
 
 // pinia

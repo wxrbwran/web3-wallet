@@ -1,9 +1,10 @@
-import { InfuraGoerliWsUrl } from '@/utils/consts'
+import { GanacheWsUrl } from '@/utils/consts'
 import VoteContractJSON from '@/contracts/Vote.json'
 import Web3 from 'web3'
 
 const useWeb3 = () => {
-  const web3 = new Web3(Web3.givenProvider || InfuraGoerliWsUrl)
+  // const web3 = new Web3(Web3.givenProvider || InfuraGoerliWsUrl)
+  const web3 = new Web3(Web3.givenProvider || GanacheWsUrl)
 
   const VoteContract: any = new web3.eth.Contract(
     VoteContractJSON.abi as any,
