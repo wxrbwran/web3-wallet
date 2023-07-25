@@ -15,12 +15,33 @@
           :value="data.accountInfo[item]"
         />
       </van-list>
+      <van-divider dashed>受托人地址</van-divider>
+      <van-form @submit="handleDelegate">
+        <van-field
+          label-width="19vw"
+          placeholder="受托人地址"
+          v-model="data.delegator"
+          name="delegator"
+          :rules="[
+            { required: true, message: '请填写受托人地址' },
+            {
+              validator: (value) => value.startsWith('0x') && value.length === 42,
+              message: '主持人地址格式错误'
+            }
+          ]"
+        >
+          <template #right-icon>
+            <van-button size="mini" native-type="submit">委托</van-button>
+          </template>
+        </van-field>
+      </van-form>
     </div>
   </div>
 </template>
 <script setup lang="ts">
 import { AccountInfoMap } from '@/utils/consts'
 import useWeb3 from '@/hooks/useWeb3'
+import { showToast } from 'vant'
 
 const { VoteContract, getAccount } = useWeb3()
 
@@ -33,13 +54,30 @@ const data = reactive({
     delegator: '',
     isVoted: '',
     targetId: ''
-  }
+  },
+  delegator: ''
 })
 const getVoterInfo = async () => {
   const account = await getAccount()
   data.accountInfo.account = account
   const voterIfo = await VoteContract.methods.voters(account).call()
   data.accountInfo = { ...data.accountInfo, ...voterIfo }
+}
+const handleDelegate = async (values: { delegator: string }) => {
+  console.log('values', values)
+  VoteContract.methods
+    .delegator(values.delegator)
+    .send({ from: data.accountInfo.account })
+    .on('receipt', () => {
+      showToast({ type: 'success', message: '委托他人代投成功' })
+    })
+    .on('error', (err: any) => {
+      // console.log(err.message)
+      showToast({
+        type: 'fail',
+        message: err.message
+      })
+    })
 }
 
 onMounted(() => {
