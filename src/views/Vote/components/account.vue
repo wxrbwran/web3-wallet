@@ -31,7 +31,7 @@
           ]"
         >
           <template #right-icon>
-            <van-button size="mini" native-type="submit">委托</van-button>
+            <van-button size="small" type="warning" native-type="submit">委托</van-button>
           </template>
         </van-field>
       </van-form>
@@ -68,7 +68,8 @@ const handleDelegate = async (values: { delegator: string }) => {
   VoteContract.methods
     .delegator(values.delegator)
     .send({ from: data.accountInfo.account })
-    .on('receipt', () => {
+    .on('receipt', (event: any) => {
+      console.log('event', event)
       showToast({ type: 'success', message: '委托他人代投成功' })
     })
     .on('error', (err: any) => {

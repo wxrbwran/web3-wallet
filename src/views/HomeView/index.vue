@@ -13,7 +13,6 @@
 import ERC20 from '@/views/ERC20/index.vue'
 import Wallet from '@/views/Wallet/index.vue'
 import Vote from '@/views/Vote/index.vue'
-
 import { useRouter } from 'vue-router'
 
 type TPath = 'wallet' | 'erc20' | 'vote'
