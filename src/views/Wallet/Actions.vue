@@ -1,7 +1,19 @@
 <template>
   <van-space>
     <InputPassword @onSuccess="onSuccess" btn-text="创建钱包"></InputPassword>
-    <van-button type="primary">导入钱包</van-button>
+    <InputPassword
+      v-if="!mnemonic"
+      @onSuccess="onSuccessImport"
+      show-mnemonic
+      btn-text="导入钱包"
+    ></InputPassword>
+    <ImportWallet
+      v-if="mnemonic"
+      :mnemonic="mnemonic"
+      @onSuccess="onSuccessPK"
+      btn-text="导入钱包"
+    ></ImportWallet>
+    <!-- <van-button type="primary">导入钱包</van-button> -->
   </van-space>
   <van-divider></van-divider>
 
@@ -17,19 +29,22 @@ import { useWalletStore } from '@/stores/useWalletStore'
 import * as bip39 from 'bip39'
 
 import InputPassword from '@/components/dialog/input-password.vue'
+import ImportWallet from '@/components/dialog/import-wallet.vue'
+
 import SaveMnemonic from '@/components/dialog/save-mnemonic.vue'
 import { DerivePath, WalletInfoStorageKey } from '@/utils/consts'
 import { showToast } from 'vant'
 
 const emits = defineEmits(['onCreateAccount'])
 
+const walletInfoLocal = window.$storage.get(WalletInfoStorageKey) || []
+
 const password = ref<string>('')
-const mnemonic = ref<string>('')
+const mnemonic = ref<string>(walletInfoLocal?.[0]?.mnemonic ?? '')
 const openMnemonic = ref<boolean>(false)
 const walletStore = useWalletStore()
 
 const { proxy } = getCurrentInstance() as any
-const walletInfoLocal = window.$storage.get(WalletInfoStorageKey) || []
 
 const onSuccess = ({ p }: { p: string }) => {
   const walletInfo = window.$storage.get(WalletInfoStorageKey)
@@ -42,6 +57,16 @@ const onSuccess = ({ p }: { p: string }) => {
   } else {
     onSave()
   }
+}
+const onSuccessImport = ({ p, m }: { p: string; m: string }) => {
+  mnemonic.value = m
+  password.value = p
+  onSave()
+}
+const onSuccessPK = () => {
+  console.log('onSuccessPK')
+  // emits('onCreateAccount')
+  // 此处由 account-list组件中 watch store 触发
 }
 const onSave = async () => {
   // console.log('onSave ok')

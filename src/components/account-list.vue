@@ -26,7 +26,6 @@
 </template>
 <script setup lang="ts">
 import { Account1, WalletInfoStorageKey } from '@/utils/consts'
-import Wallet from 'ethereumjs-wallet'
 import InputPassword from '@/components/dialog/input-password.vue'
 import { useWalletStore } from '@/stores/useWalletStore'
 import { getPrivateKeyByWeb3KeyStore, transfer } from '@/utils/tools'
@@ -35,6 +34,11 @@ import { showToast } from 'vant'
 const { proxy } = getCurrentInstance() as any
 const walletInfo = ref<TWalletInfo[]>([])
 const walletStore = useWalletStore()
+
+watch(walletStore.data, (newVal) => {
+  console.log('newVal', newVal)
+  getWalletInfo()
+})
 
 const getWalletInfo = async () => {
   const toast = showToast({ type: 'loading' })
@@ -62,8 +66,8 @@ const onSuccess = async (item: TWalletInfo, { p }: { p: string }, index: number)
     showToast({ type: 'fail', message: e.message })
   }
 }
-onMounted(() => {
-  getWalletInfo()
+onMounted(async () => {
+  await getWalletInfo()
 })
 
 defineExpose({
