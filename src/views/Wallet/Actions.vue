@@ -34,11 +34,9 @@ import SaveMnemonic from '@/components/dialog/save-mnemonic.vue'
 import { DerivePath, WalletInfoStorageKey } from '@/utils/consts'
 import { generateKeystore } from '@/utils/tools'
 import { showToast } from 'vant'
-import useWeb3 from '@/hooks/useWeb3'
 import useEthers from '@/hooks/useEthers'
 
-const { web3 } = useWeb3()
-const { provider, signer, getAccount } = useEthers()
+const { provider } = useEthers()
 
 const emits = defineEmits(['onCreateAccount'])
 

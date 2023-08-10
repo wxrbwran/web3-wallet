@@ -1,8 +1,8 @@
-export const Account1 = '0xbC1b6866204241EcDbc94071717a8043082Bfc2E'
+export const Account1 = '0x7993ec51D75c790ce10837c3195E6605B90Bf8Bd'
 
-export const Account2 = '0x59e19bfae42C786c5eC4EF0abe68f64707D02C6f'
+export const Account2 = '0x8F9a5caeD0802b3D58c4B54a41f79068CE09B87E'
 
-export const Account3 = '0xBb9429df9151ba6c88dC3e163403aC7Ed33354E3'
+export const Account3 = '0x27de8Cbb4B56FcD1aa40a82E43FAe413E0eB908e'
 
 export const InfuraGoerliWsUrl = 'wss://goerli.infura.io/ws/v3/c716104bdaa8452cbc8cb522c00c8f10'
 export const GanacheWsUrl = 'ws://127.0.0.1:8545'
