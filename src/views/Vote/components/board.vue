@@ -12,33 +12,35 @@
   </div>
 </template>
 <script setup lang="ts">
-import useWeb3 from '@/hooks/useWeb3'
+import useEthers from '@/hooks/useEthers'
 
-const { VoteContract, getAccount } = useWeb3()
+const { VoteContract, provider } = useEthers()
 
 const data = reactive({
   board: []
 })
 const vote = async (i: number) => {
   console.log('vote', i)
-  const account = await getAccount()
-  const res = await VoteContract.methods.vote(i).send({ from: account })
+  const signer = await provider.getSigner()
+  const contractWithSigner = await VoteContract.connect(signer)
+  const res = await contractWithSigner.vote(i)
   console.log('res', res)
-  await getBoardInfo()
 }
 const initEventListen = () => {
-  VoteContract.events
-    .VoteSuccess({ fromBlock: 0 }, (err: Error, event: any) => {
-      console.log('监听执行')
-      console.log('event', event)
-    })
-    .on('data', (event: any) => {
-      console.log('智能合约触发事件：', event)
-    })
+  VoteContract.on('VoteSuccess', async (msg: string) => {
+    console.log('智能合约触发事件：', msg)
+    await getBoardInfo()
+  })
+  // .({ fromBlock: 0 }, (err: Error, event: any) => {
+  //   console.log('监听执行')
+  //   console.log('event', event)
+  // })
+  // .on('data', (event: any) => {
+  //   console.log('智能合约触发事件：', event)
+  // })
 }
 const getBoardInfo = async () => {
-  const res = await VoteContract.methods.getBoardInfo().call()
-  console.log('getBoardInfo', res)
+  const res = await VoteContract.getBoardInfo()
   data.board = res
 }
 onMounted(async () => {

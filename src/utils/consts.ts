@@ -6,6 +6,7 @@ export const Account3 = '0xBb9429df9151ba6c88dC3e163403aC7Ed33354E3'
 
 export const InfuraGoerliWsUrl = 'wss://goerli.infura.io/ws/v3/c716104bdaa8452cbc8cb522c00c8f10'
 export const GanacheWsUrl = 'ws://127.0.0.1:8545'
+export const GanacheUIHttpUrl = 'http://127.0.0.1:7545'
 
 export const DerivePath = `m/44'/60'/0'/0/`
 
@@ -30,3 +31,6 @@ export const AccountInfoMap: Record<string, string> = {
   //   isVoted: '',
   //   targetId: ''
 }
+
+export const QutmContractAddress = '0xDa3bAFC33F3b6Bf5f509F8C2880c5A0142d6E51e'
+export const VoteContractAddress = '0x3DC80ac0c7d3Fd6E6d6d0360a0975F55d90025E8'

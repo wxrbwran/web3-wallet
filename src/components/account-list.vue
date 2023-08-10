@@ -30,8 +30,9 @@ import InputPassword from '@/components/dialog/input-password.vue'
 import { useWalletStore } from '@/stores/useWalletStore'
 import { getPrivateKeyByWeb3KeyStore, transfer } from '@/utils/tools'
 import { showToast } from 'vant'
+import useWeb3 from '@/hooks/useWeb3'
 
-const { proxy } = getCurrentInstance() as any
+const { web3 } = useWeb3()
 const walletInfo = ref<TWalletInfo[]>([])
 const walletStore = useWalletStore()
 
@@ -44,8 +45,8 @@ const getWalletInfo = async () => {
   const toast = showToast({ type: 'loading' })
   const walletInfoLocal = window.$storage.get(WalletInfoStorageKey) || []
   await walletInfoLocal.forEach(async (info: TWalletInfo, index: number) => {
-    const res = await proxy?.web3?.eth.getBalance(info.address)
-    const balance = proxy?.web3?.utils.fromWei(res || '0', 'ether')
+    const res = await web3?.eth.getBalance(info.address)
+    const balance = web3?.utils.fromWei(res || '0', 'ether')
     info.balance = +Number.parseFloat(balance).toFixed(7)
     walletInfo.value[index] = info
   })
@@ -53,12 +54,12 @@ const getWalletInfo = async () => {
 }
 const onSuccess = async (item: TWalletInfo, { p }: { p: string }, index: number) => {
   try {
-    const pk = getPrivateKeyByWeb3KeyStore(proxy.web3, item.keystore, p)
+    const pk = getPrivateKeyByWeb3KeyStore(web3, item.keystore, p)
     if (pk) {
-      await transfer(proxy.web3, item.address, Account1, pk)
+      await transfer(web3, item.address, Account1, pk)
       // console.log('res', res)
       showToast({ type: 'success', message: '转账成功' })
-      walletInfo.value[index] = await proxy?.web3?.eth.getBalance(item.address)
+      walletInfo.value[index] = await web3?.eth.getBalance(item.address)
       walletStore.saveInfo(walletInfo.value)
       window.$storage.set(WalletInfoStorageKey, walletInfo.value)
     }

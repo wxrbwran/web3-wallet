@@ -2,8 +2,8 @@ import Web3 from 'web3'
 import { Buffer } from 'node:buffer'
 //@ts-ignore
 import Tx from 'ethereumjs-tx'
-import { error } from 'node:console'
 import { showToast } from 'vant'
+import { ethers } from 'ethers'
 
 export const getPrivateKeyByWeb3KeyStore = (web3: Web3, keystore: any, password: string) => {
   // 1. web3.js方法
@@ -101,4 +101,14 @@ export const transfer = (
         })
       })
   })
+}
+
+//
+export async function generateKeystore(privateKey: string, password = '') {
+  const wallet = new ethers.Wallet(privateKey)
+
+  // Encrypt the wallet with the password
+  const keystore = await wallet.encrypt(password)
+
+  return keystore
 }

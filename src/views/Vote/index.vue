@@ -27,20 +27,7 @@ import Mandate from './components/mandate.vue'
 
 const active = ref(0)
 
-// console.log('web3', web3)
-// const initContract = async () => {
-//   const VoteContract: any = new web3.eth.Contract(
-//     VoteContractJSON.abi as any
-//     // 部署地址 暂未部署，eth不够
-//     // '0xEc20Ff7B90ecf57BBef561a2b56124cC370bF32a'
-//   )
-//   console.log('VoteContract', VoteContract)
-//   contract.value = VoteContract
-// }
-
-onMounted(async () => {
-  // initContract()
-})
+onMounted(async () => {})
 
 const handleClick = () => {
   // router.push({ name: 'detail' })

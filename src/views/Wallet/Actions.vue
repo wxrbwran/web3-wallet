@@ -23,7 +23,6 @@
   </div>
 </template>
 <script setup lang="ts">
-import { mnemonicToSeed } from 'bip39'
 import Wallet, { hdkey } from 'ethereumjs-wallet'
 import { useWalletStore } from '@/stores/useWalletStore'
 import * as bip39 from 'bip39'
@@ -33,7 +32,13 @@ import ImportWallet from '@/components/dialog/import-wallet.vue'
 
 import SaveMnemonic from '@/components/dialog/save-mnemonic.vue'
 import { DerivePath, WalletInfoStorageKey } from '@/utils/consts'
+import { generateKeystore } from '@/utils/tools'
 import { showToast } from 'vant'
+import useWeb3 from '@/hooks/useWeb3'
+import useEthers from '@/hooks/useEthers'
+
+const { web3 } = useWeb3()
+const { provider, signer, getAccount } = useEthers()
 
 const emits = defineEmits(['onCreateAccount'])
 
@@ -43,8 +48,6 @@ const password = ref<string>('')
 const mnemonic = ref<string>(walletInfoLocal?.[0]?.mnemonic ?? '')
 const openMnemonic = ref<boolean>(false)
 const walletStore = useWalletStore()
-
-const { proxy } = getCurrentInstance() as any
 
 const onSuccess = ({ p }: { p: string }) => {
   const walletInfo = window.$storage.get(WalletInfoStorageKey)
@@ -72,7 +75,7 @@ const onSave = async () => {
   // console.log('onSave ok')
   const addressIndex = walletInfoLocal?.length || 0
   const toast = showToast({ type: 'loading', message: '正在保存钱包信息', duration: 0 })
-  const seed = await mnemonicToSeed(mnemonic.value)
+  const seed = await bip39.mnemonicToSeed(mnemonic.value)
   const hdWallet = hdkey.fromMasterSeed(seed)
   // console.log('hdWallet', hdWallet)
   // m/purpse'/coin_type'/account'/change/address_index
@@ -89,7 +92,9 @@ const onSave = async () => {
   const privateKey = wallet.getPrivateKey().toString('hex')
   // 生成keystore
   // const keystore = await wallet.toV3(password.value) // 太慢
-  const keystore = proxy?.web3.eth.accounts.encrypt(privateKey, password.value)
+  // const keystore = web3.eth.accounts.encrypt(privateKey, password.value) // json对象
+  const keystore = await generateKeystore(privateKey, password.value) // json字符串
+
   const walletInfo: TWalletInfo[] = [
     ...walletInfoLocal,
     {

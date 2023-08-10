@@ -40,10 +40,11 @@
 </template>
 <script setup lang="ts">
 import { AccountInfoMap } from '@/utils/consts'
-import useWeb3 from '@/hooks/useWeb3'
 import { showToast } from 'vant'
+import useEthers from '@/hooks/useEthers'
 
-const { VoteContract, getAccount } = useWeb3()
+// const { VoteContract, getAccount } = useWeb3()
+const { VoteContract, provider } = useEthers()
 
 const data = reactive({
   loading: false,
@@ -58,28 +59,39 @@ const data = reactive({
   delegator: ''
 })
 const getVoterInfo = async () => {
-  const account = await getAccount()
+  const signer = await provider.getSigner()
+  const account = await signer.getAddress()
   data.accountInfo.account = account
-  const voterInfo = await VoteContract.methods.voters(account).call()
+  const voterInfo = await VoteContract.voters(account)
   data.accountInfo = { account, ...voterInfo }
 }
 const handleDelegate = async (values: { delegator: string }) => {
   console.log('values', values)
-  VoteContract.methods
-    .delegate(values.delegator)
-    .send({ from: data.accountInfo.account })
-    .on('receipt', async (event: any) => {
-      console.log('event', event)
-      showToast({ type: 'success', message: '委托他人代投成功' })
-      await getVoterInfo()
+  try {
+    const signer = await provider.getSigner()
+    const VoteContractWithSigner = VoteContract.connect(signer)
+    const tx = await VoteContractWithSigner.delegate(values.delegator)
+    await tx.wait()
+    showToast({ type: 'success', message: '委托他人代投成功' })
+    await getVoterInfo()
+  } catch (err: any) {
+    showToast({
+      type: 'fail',
+      message: err.message
     })
-    .on('error', (err: any) => {
-      // console.log(err.message)
-      showToast({
-        type: 'fail',
-        message: err.message
-      })
-    })
+  }
+  // .on('receipt', async (event: any) => {
+  //   console.log('event', event)
+  //   showToast({ type: 'success', message: '委托他人代投成功' })
+  //   await getVoterInfo()
+  // })
+  // .on('error', (err: any) => {
+  //   // console.log(err.message)
+  //   showToast({
+  //     type: 'fail',
+  //     message: err.message
+  //   })
+  // })
 }
 
 onMounted(async () => {

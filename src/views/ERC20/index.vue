@@ -66,24 +66,27 @@
 </template>
 
 <script setup lang="ts">
-import Web3 from 'web3'
-import QtumContractJSON from '@/contracts/Qutm.json'
 import { CoinInfoMap } from '@/utils/consts'
 import BottomNote from '@/components/bottom-note.vue'
 import { showLoadingToast, showToast } from 'vant'
+import useEthers from '@/hooks/useEthers'
 
-const { proxy } = getCurrentInstance() as any
-const web3: Web3 = proxy.web3
-const contract = ref()
+const { provider, QutmContract, ethers } = useEthers()
 
-const toAddress = ref<string>('0xbC1b6866204241EcDbc94071717a8043082Bfc2E')
+const toAddress = ref<string>('0x8F9a5caeD0802b3D58c4B54a41f79068CE09B87E')
 const count = ref<number>()
 const currentAccount = ref<string>('')
 const sending = ref<boolean>(false)
 
-const data = reactive<{ coinInfo: TCoinInfo; finished: boolean; loading: boolean }>({
+const data = reactive<{
+  coinInfo: TCoinInfo
+  finished: boolean
+  loading: boolean
+  signer: JsonRpcSigner
+}>({
   loading: false,
   finished: false,
+  signer: null,
   coinInfo: {
     name: '',
     symbol: '',
@@ -93,36 +96,32 @@ const data = reactive<{ coinInfo: TCoinInfo; finished: boolean; loading: boolean
   }
 })
 
-const initContract = async () => {
-  const qtumContract = new web3.eth.Contract(
-    QtumContractJSON.abi as any,
-    // 部署地址
-    // '0xEc20Ff7B90ecf57BBef561a2b56124cC370bF32a' // goerli
-    '0x3e1A0F6aB4038Ce4742155263644c1c3DdE531fa' // ganache
-  )
-  contract.value = qtumContract
-  // console.log('qtumContract', qtumContract)
-}
-
 // 获取代币信息
 const getCoinInfo = async () => {
   data.loading = true
-  const account = await web3.eth.requestAccounts()
-  currentAccount.value = account[0]
-  const methods = await contract.value.methods
-  const name = await methods.name().call()
-  const symbol = await methods.symbol().call()
-  const totalSupply = await methods.totalSupply().call()
-  const balanceOf = await methods.balanceOf(account[0]).call()
+  const curSigner = await provider.getSigner()
+  data.signer = curSigner
+  currentAccount.value = await curSigner.getAddress()
+
+  const name = await QutmContract.name()
+
+  const symbol = await QutmContract.symbol()
+
+  const totalSupply = await QutmContract.totalSupply()
+
+  const balanceOf = await QutmContract.balanceOf(currentAccount.value)
+
   data.coinInfo = {
     name,
     symbol,
-    totalSupply: web3.utils.fromWei(totalSupply, 'ether'),
+    totalSupply: ethers.utils.formatEther(totalSupply),
     // totalSupply,
-    currentAccount: account[0],
+    currentAccount: currentAccount.value,
     // balanceOf
-    balanceOf: web3.utils.fromWei(balanceOf, 'ether')
+    balanceOf: ethers.utils.formatEther(balanceOf)
   }
+  // console.log('coinInfo', data.coinInfo)
+
   data.loading = false
   data.finished = true
 
@@ -132,39 +131,61 @@ const getCoinInfo = async () => {
 const handleTransfer = async () => {
   sending.value = true
   // console.log('handleTransfer', toAddress.value, count.value)
-  const weiCount = web3.utils.toWei(`${count.value}`, 'ether')
+  const weiCount = ethers.utils.parseEther(`${count.value}`)
   // console.log('handleTransfer', weiCount)
   const loadingToast = showLoadingToast({ duration: 0, message: '正在转账' })
-  contract.value.methods
-    .transfer(toAddress.value, weiCount)
-    .send({
-      from: currentAccount.value
+  console.log('contract', QutmContract)
+  // console.log('data', toRaw(data.signer))
+  const contractWithSigner = QutmContract.connect(toRaw(data.signer))
+  // console.log('contractWithSigner', contractWithSigner)
+  try {
+    const tx = await contractWithSigner.transfer(toAddress.value, weiCount)
+    await tx.wait()
+    loadingToast.close()
+    sending.value = false
+    toAddress.value = ''
+    count.value = undefined
+    // console.log('交易成功')
+    showToast({
+      type: 'success',
+      message: '交易成功'
     })
-    .on('receipt', () => {
-      loadingToast.close()
-      sending.value = false
-      toAddress.value = ''
-      count.value = undefined
-      // console.log('交易成功')
-      showToast({
-        type: 'success',
-        message: '交易成功'
-      })
-      getCoinInfo()
+    getCoinInfo()
+  } catch (err: any) {
+    loadingToast.close()
+    sending.value = false
+    // console.log(err.message)
+    showToast({
+      type: 'fail',
+      message: err.message
     })
-    .on('error', (err: any) => {
-      loadingToast.close()
-      sending.value = false
-      // console.log(err.message)
-      showToast({
-        type: 'fail',
-        message: err.message
-      })
-    })
+  }
+
+  // .on('receipt', () => {
+  //   loadingToast.close()
+  //   sending.value = false
+  //   toAddress.value = ''
+  //   count.value = undefined
+  //   // console.log('交易成功')
+  //   showToast({
+  //     type: 'success',
+  //     message: '交易成功'
+  //   })
+  //   getCoinInfo()
+  // })
+  // .on('error', (err: any) => {
+  //   loadingToast.close()
+  //   sending.value = false
+  //   // console.log(err.message)
+  //   showToast({
+  //     type: 'fail',
+  //     message: err.message
+  //   })
+  // })
 }
 
 onMounted(async () => {
-  await initContract()
+  // await initContract()
   await getCoinInfo()
 })
 

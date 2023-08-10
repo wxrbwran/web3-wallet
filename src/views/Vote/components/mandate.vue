@@ -43,7 +43,7 @@
 </template>
 <script setup lang="ts">
 import { showFailToast, showToast } from 'vant'
-import useWeb3 from '@/hooks/useWeb3'
+import useEthers from '@/hooks/useEthers'
 
 type TForm = {
   host: string
@@ -59,33 +59,31 @@ const data = reactive<TForm>({
   voter: '',
   voterArr: []
 })
-const { getAccount, VoteContract: contract } = useWeb3()
+// const { getAccount, VoteContract: contract } = useWeb3()
+const { VoteContract, provider } = useEthers()
+
 const onSubmit = async (values: TForm) => {
   console.log('submit', values)
-  data.voterArr = data.voter.split(',')
-  console.log('data.voterArr', data.voterArr)
-  const account = await getAccount()
-  console.log('account', account)
-
-  contract.methods
-    .mandate(data.voterArr)
-    .send({ from: account })
-    .on('receipt', () => {
-      showToast({ type: 'success', message: '分发选票成功' })
+  data.voterArr = data.voter.split(',').map((a) => a.trim())
+  console.log('data.voterArr', data.voterArr, toRaw(data.voterArr))
+  const signer = await provider.getSigner()
+  const VoteContractWithSigner = VoteContract.connect(signer)
+  try {
+    const tx = await VoteContractWithSigner.mandate(toRaw(data.voterArr))
+    await tx.wait()
+    showToast({ type: 'success', message: '分发选票成功' })
+  } catch (e: any) {
+    console.error(e)
+    showToast({
+      type: 'fail',
+      message: e.message
     })
-    .on('error', (err: any) => {
-      // console.log(err.message)
-      showToast({
-        type: 'fail',
-        message: err.message
-      })
-    })
+  }
 }
 // 获取主持人信息
 const getHost = async () => {
   try {
-    const methods = await contract.methods
-    data.host = await methods.host().call()
+    data.host = await VoteContract.host()
   } catch (e: any) {
     showFailToast({ message: e.message })
   }
