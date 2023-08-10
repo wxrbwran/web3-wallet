@@ -10,6 +10,7 @@ declare module 'vue' {
     AccountList: typeof import('./src/components/account-list.vue')['default']
     AccountSys: typeof import('./src/components/learn/account-sys.vue')['default']
     BottomNote: typeof import('./src/components/bottom-note.vue')['default']
+    Ethers: typeof import('./src/components/learn/ethers.vue')['default']
     ImportWallet: typeof import('./src/components/dialog/import-wallet.vue')['default']
     InputPassword: typeof import('./src/components/dialog/input-password.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
