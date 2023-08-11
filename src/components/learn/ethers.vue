@@ -128,14 +128,17 @@ const testContracts = async () => {
   )
   console.log('contract', contract)
   console.log('signer', signer, signer.getAddress())
-  const balanceQutm = await contract.balanceOf(signer.getAddress())
+  const address = await signer.getAddress()
+  console.log('address', address)
+
+  const balanceQutm = await contract.balanceOf(address)
   console.log(`token持仓: ${ethers.utils.formatEther(balanceQutm)}\n`)
   const tx = await contract.transfer(
     '0x27de8Cbb4B56FcD1aa40a82E43FAe413E0eB908e',
     ethers.utils.parseEther('10')
   )
   await tx.wait()
-  const balance_transfer = await contract.balanceOf(signer.getAddress())
+  const balance_transfer = await contract.balanceOf(address)
   console.log(`转账后signer持仓: ${ethers.utils.formatEther(balance_transfer)}\n`)
 }
 onMounted(() => {
