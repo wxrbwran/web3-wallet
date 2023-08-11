@@ -1,4 +1,5 @@
 declare interface Window {
+  ethers: any
   ethereum: any
   $storage: {
     setType: (key: 'localStorage' | 'sessionStorage') => any

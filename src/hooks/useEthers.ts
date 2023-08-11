@@ -20,7 +20,7 @@ const useEthers = () => {
     const curSigner = await provider.getSigner()
     return curSigner
   }
-
+  window.ethers = ethers
   return {
     ethers,
     provider,
